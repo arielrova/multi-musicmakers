@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Synthesizer></Synthesizer>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+// How to structure instruments + FX + Deviceorientation listeners?
+
+import Synthesizer from './components/Synthesizer.vue'
+import Producer from './components/Producer.vue'
+import Tone from 'tone'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Producer,
+    Synthesizer
   }
 }
 </script>
