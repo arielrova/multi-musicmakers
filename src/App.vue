@@ -1,25 +1,12 @@
 <template>
   <div id="app">
-    <Synthesizer></Synthesizer>
+    <div id="nav">
+      <router-link to="/instrument">Instrument</router-link> |
+      <router-link to="/producer">Producer</router-link>
+    </div>
+    <router-view/>
   </div>
 </template>
-
-<script>
-
-// How to structure instruments + FX + Deviceorientation listeners?
-
-import Synthesizer from './components/Synthesizer.vue'
-import Producer from './components/Producer.vue'
-import Tone from 'tone'
-
-export default {
-  name: 'app',
-  components: {
-    Producer,
-    Synthesizer
-  }
-}
-</script>
 
 <style>
 #app {

@@ -22,6 +22,7 @@
 <script>
 import Tone from 'tone'
 
+// HÄR ÄR INSTRUMENT
 let synthesizer = new Tone.Synth().toMaster()
 
 export default {
@@ -49,12 +50,10 @@ export default {
       this.sequencer.start()
     },
     testSound: function() {
-      console.log(this.sequence)
       this.synthesizer.triggerAttackRelease("C4")
     }
   },
 }
-
 
 
 var setupDataStructure = function() {
@@ -68,7 +67,9 @@ var setupDataStructure = function() {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .sequencer {
+  border: 1px black solid;
   display: flex;
   width: 400px;
 }
