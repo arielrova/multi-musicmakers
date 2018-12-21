@@ -1,12 +1,11 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/instrument">Instrument</router-link> |
-      <router-link to="/producer">Producer</router-link>
-    </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+</script>
 
 <style>
 #app {

@@ -16,16 +16,16 @@
   </div>
   <button v-on:click="runSequencer()">Play some song</button>
   <button v-on:click="testSound()">Test the sound</button>
+  <button v-on:click="submitSong()">I'm done</button>
 </div>
 </template>
 
 <script>
 import Tone from 'tone'
 
-var instrument = require('../funkystuff/instrument1.js')
-
-// HÄR ÄR INSTRUMENT
-// let synthesizer = new Tone.Synth().toMaster()
+let instrument = require('../funkystuff/instrument1.js')
+let firebase = require('../assets/js/firebase.js')
+const db = firebase.db
 let synthesizer = instrument.createSynthesizer()
 
 export default {
@@ -60,7 +60,18 @@ export default {
     },
     testSound: function() {
       this.synthesizer.triggerAttackRelease("C4")
-    }
+    },
+    submitSong: function() {
+        var vm = this
+        var sessionIndex
+        db.ref('noSessions').once('value').then(function(snapshot) {
+            sessionIndex = snapshot.val()
+            }).then(function() {
+                db.ref(sessionIndex + '/instrument1').set({
+                  track: vm.sequence
+                })
+            })
+        }
   },
 }
 

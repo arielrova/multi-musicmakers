@@ -13,17 +13,24 @@ npm run serve
 ## Project development backlog:
 
 ### To-do:
-6. Application "back-end", state management, database + SESSIONS
+SM = Session Management (Firebase, database, state-management)
+
+6. SM - Listen for both instruments completion
+7. SM - Instrument component flex instrument 1 & 2
+8. Clean up instrument import and file structure (assets etc.)
+9. Implement instruments stop & play function
+2. Make dummy second instrument view (?)
+9. SM - Producer post-production state setup (time consuming)
 4. Scaffold Effects separate modular thing
 5. Scaffold Mobile sensors modular thing
-2. Make dummy second instrument view (?)
-7. Full blown navigation with sessions
 
 ### Known Bugs:
 
 ### Done: 
-1. Initial project setup + Sequencer playback + initial UI
+1. Initial project setup + Sequencer playback + initial instrument UI
 1. Make dummy producer view
 3. Make router + dummy navigation
 1. Sequencer not updating sound output upon new array-data
 3. Scaffold Instruments separate modular thing
+4. SM - Pre-production producer view setup
+5. SM - Send instrument sequence to DB
