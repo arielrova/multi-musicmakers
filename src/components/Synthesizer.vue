@@ -22,8 +22,11 @@
 <script>
 import Tone from 'tone'
 
+var instrument = require('../funkystuff/instrument1.js')
+
 // HÄR ÄR INSTRUMENT
-let synthesizer = new Tone.Synth().toMaster()
+// let synthesizer = new Tone.Synth().toMaster()
+let synthesizer = instrument.createSynthesizer()
 
 export default {
   name: 'Synthesizer',
@@ -45,7 +48,7 @@ export default {
       var sequence = this.sequence
       this.sequencer = new Tone.Sequence(function(time, col) {
         var beat = sequence[col]
-        if (beat !== undefined || array.length !== 0) {
+        if (beat !== undefined || beat.length !== 0) {
           for(var i = 0; i < beat.length; i++) {
             synthesizer.triggerAttackRelease(beat[i])
           }
