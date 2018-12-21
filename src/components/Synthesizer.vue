@@ -42,9 +42,15 @@ export default {
     runSequencer: function() {
       Tone.context.resume()
 
+      var sequence = this.sequence
       this.sequencer = new Tone.Sequence(function(time, col) {
-        synthesizer.triggerAttackRelease(col)
-      }, this.sequence, "16n")
+        var beat = sequence[col]
+        if (beat !== undefined || array.length !== 0) {
+          for(var i = 0; i < beat.length; i++) {
+            synthesizer.triggerAttackRelease(beat[i])
+          }
+        }
+      }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
 
       Tone.Transport.start()
       this.sequencer.start()

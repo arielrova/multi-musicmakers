@@ -21,9 +21,9 @@ npm run serve
 7. Full blown navigation with sessions
 
 ### Known Bugs:
-1. Sequencer not updating sound output upon new array-data
 
 ### Done: 
 1. Initial project setup + Sequencer playback + initial UI
 1. Make dummy producer view
 3. Make router + dummy navigation
+1. Sequencer not updating sound output upon new array-data
