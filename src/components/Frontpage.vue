@@ -5,6 +5,7 @@
         <router-link v-if="status == 'inProduction'" to="/instrument/2">Instrument 2</router-link>
         <router-link v-if="status == 'preProduction'" to="/producer/pre">Producer</router-link>
         <router-link v-if="status == 'postProduction'" to="/producer/post">Producer</router-link>
+        <button v-on:click="resetFirebase()">RESET DATABASE</button>
         <div v-if="status == 'produced'">
             <h1>Here is a player!</h1>
         </div>
@@ -25,6 +26,11 @@ export default {
       }
   },
   methods: {
+      resetFirebase: function() {
+          db.ref("1").set({
+              status: "preProduction"
+          })
+      }
   },
   created() {
       var vm = this
