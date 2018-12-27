@@ -29,10 +29,10 @@
         <div v-if="productionStatus == 'post'">
             <h1>Get back instruments</h1>
             <div>
-                <button>Enter view where you add effects to track 1</button>
+                <button v-on:click="runSequencer(instrument1.track)">Enter view where you add effects to track 1</button>
             </div>
             <div>
-                <button>Enter view where you add effects to track 2</button>
+                <button v-on:click="runSequencer(instrument2.track)">Enter view where you add effects to track 2</button>
             </div>
             <div>
                 <button>Playback the master mix</button>
@@ -45,7 +45,10 @@
 </template>
 
 <script>
+import Tone from 'tone'
+let instrument = require('../funkystuff/instrument1.js')
 let firebase = require('../assets/js/firebase.js')
+let synthesizer = instrument.createSynthesizer()
 const db = firebase.db
 
 export default {
@@ -58,29 +61,98 @@ export default {
           key: 'C',
           beat: "beat1",
           tempo: 120,
+          instrument1: {
+              track: '',
+              fx: ''
+          },
+          instrument2: {
+              track: '',
+              fx: '',
+          },
       }
   },
   created() {
     this.productionStatus = this.$route.params.stage
+    if(this.productionStatus == 'post') {
+        this.getTracks()
+    }
   },
   methods: {
     setProductionRules: function() {
         var vm = this
         var sessionIndex
-        db.ref('noSessions').once('value').then(function(snapshot) {
-            sessionIndex = snapshot.val()
-            }).then(function() {
+        db.ref('noSessions').once('value').then(function(data) {
+            sessionIndex = data.val()
+            })
+            .then(function() {
                 db.ref(sessionIndex + '/sessionParameters').set({
                     beat: vm.beat,
                     key: vm.key,
                     tempo: vm.tempo
                 })
 
+                db.ref(sessionIndex + '/instrument1').set({
+                    track: '',
+                    fx: ''
+                })
+
+                db.ref(sessionIndex + '/instrument2').set({
+                    track: '',
+                    fx: ''
+                })
+
                 db.ref(sessionIndex + '/status').set('inProduction')
             })
-        }
+    },
+    getTracks: function() {
+        var vm = this
+        var sessionIndex
+        db.ref('noSessions').once('value').then(function(data) {
+            sessionIndex = data.val()
+            })
+
+        db.ref(sessionIndex).once('value').then(function(data) {
+            var session = data.val()
+            console.log(session)
+            console.log(vm)
+            vm.instrument1.track = prepForPlayback(session[sessionIndex].instrument1.track)
+            vm.instrument2.track = prepForPlayback(session[sessionIndex].instrument2.track)
+        })
+
+        console.log(this)
+    },
+    runSequencer: function(sequence) {
+        console.log(sequence)
+        Tone.context.resume()
+        this.sequencer = new Tone.Sequence(function(time, col) {
+            var beat = sequence[col]
+            if (beat !== undefined || beat.length !== 0) {
+            for(var i = 0; i < beat.length; i++) {
+                synthesizer.triggerAttackRelease(beat[i])
+                }
+            }
+        }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
+
+        Tone.Transport.start()
+        this.sequencer.start()
+    },
+    stopSequencer: function() {
+      this.sequencer.stop()
+    },
     }
 }
+
+var prepForPlayback = function(array) {
+    var returnArray = []
+    for(var i = 0; i < 15; i++) {
+        if(array[i] == undefined) {
+            returnArray[i] = []
+        } else {
+            returnArray[i] = array[i]
+        }
+    }
+    return returnArray
+} 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

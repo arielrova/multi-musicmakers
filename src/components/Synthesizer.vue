@@ -14,14 +14,16 @@
         :value="note">
     </div>
   </div>
-  <button v-on:click="runSequencer()">Play some song</button>
-  <button v-on:click="testSound()">Test the sound</button>
+  <button v-on:click="runSequencer()" id="synthStart">Play some song</button>
+  <button v-on:click="stopSequencer()">Pause the song</button>
   <button v-on:click="submitSong()">I'm done</button>
 </div>
 </template>
 
 <script>
 import Tone from 'tone'
+import StartAudioContext from 'startaudiocontext'
+  // import UnmuteButton from 'unmute'
 
 let instrument = require('../funkystuff/instrument1.js')
 let firebase = require('../assets/js/firebase.js')
@@ -36,30 +38,50 @@ export default {
     return {
       notes: { notes: ['C4', 'D4', 'E4', 'G4', 'A4'] },
       sequence: [],
+      instrumentNo: ''
     }
   },
   created() {
     this.sequence = setupDataStructure()
+    this.instrumentNo = this.$route.params.number
+
+    var getProductionRules = function() {
+        var vm = this
+        var sessionIndex
+        db.ref('noSessions').once('value').then(function(snapshot) {
+            sessionIndex = snapshot.val()
+            }).then(function() {
+                db.ref(sessionIndex + '/sessionParameters').set({
+                    beat: vm.beat,
+                    key: vm.key,
+                    tempo: vm.tempo
+                })
+
+                db.ref(sessionIndex + '/status').set('inProduction')
+            })
+        }
   },
   methods: {
     runSequencer: function() {
-      Tone.context.resume()
-
-      var sequence = this.sequence
-      this.sequencer = new Tone.Sequence(function(time, col) {
-        var beat = sequence[col]
-        if (beat !== undefined || beat.length !== 0) {
-          for(var i = 0; i < beat.length; i++) {
-            synthesizer.triggerAttackRelease(beat[i])
+      var vm = this
+      var ts = Tone.Transport
+      StartAudioContext(Tone.context).then(function() {
+        var sequence = vm.sequence
+        vm.sequencer = new Tone.Sequence(function(time, col) {
+          var beat = sequence[col]
+          if (beat !== undefined || beat.length !== 0) {
+            for(var i = 0; i < beat.length; i++) {
+              synthesizer.triggerAttackRelease(beat[i])
+            }
           }
-        }
-      }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
+        }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
 
-      Tone.Transport.start()
-      this.sequencer.start()
+        ts.start()
+        vm.sequencer.start()
+      })
     },
-    testSound: function() {
-      this.synthesizer.triggerAttackRelease("C4")
+    stopSequencer: function() {
+      this.sequencer.stop()
     },
     submitSong: function() {
         var vm = this
@@ -67,11 +89,17 @@ export default {
         db.ref('noSessions').once('value').then(function(snapshot) {
             sessionIndex = snapshot.val()
             }).then(function() {
-                db.ref(sessionIndex + '/instrument1').set({
-                  track: vm.sequence
-                })
+                db.ref(sessionIndex + '/instrument' + vm.instrumentNo + '/track').set(vm.sequence)
             })
-        }
+
+        db.ref(sessionIndex).once('value').then(function(snapshot) {
+          var session = snapshot.val()
+          if(session[sessionIndex].instrument1.track && session[sessionIndex].instrument2.track) {
+            db.ref(sessionIndex + '/status').set('postProduction'
+            )
+          }
+        })
+      }
   },
 }
 

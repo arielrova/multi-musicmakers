@@ -10,6 +10,9 @@ npm install
 npm run serve
 ```
 
+### Run on your phone
+Firewalls will ruin stuff. Eduroam will definitly not work. Restart dev server with shared mobile phone 4G.
+
 ## Project development backlog:
 
 ### To-do:
@@ -18,11 +21,13 @@ SM = Session Management (Firebase, database, state-management)
 6. SM - Listen for both instruments completion
 7. SM - Instrument component flex instrument 1 & 2
 8. Clean up instrument import and file structure (assets etc.)
-9. Implement instruments stop & play function
+9. Implement instruments stop & play functions in their separate .js-files
+10. Look into iOS sounds and tone.js
 2. Make dummy second instrument view (?)
 9. SM - Producer post-production state setup (time consuming)
 4. Scaffold Effects separate modular thing
 5. Scaffold Mobile sensors modular thing
+6. Abstract production rules and Firebase call/write-functions
 
 ### Known Bugs:
 
