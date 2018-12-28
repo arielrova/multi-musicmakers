@@ -26,6 +26,7 @@ import Tone from 'tone'
   import UnmuteButton from 'unmute'
 
 let instrument = require('../funkystuff/instrument1.js')
+let chorus = require('../funkystuff/chorus.js')
 let firebase = require('../assets/js/firebase.js')
 const db = firebase.db
 let synthesizer = instrument.createSynthesizer()
@@ -36,7 +37,7 @@ export default {
   },
   data: function () {
     return {
-      notes: { notes: ['C4', 'D4', 'E4', 'G4', 'A4'] },
+      notes: { notes: ['C4', 'D4', 'D#4', 'F4', 'G4', 'A#4', 'C5'] },
       sequence: [],
       instrumentNo: ''
     }
@@ -70,7 +71,7 @@ export default {
         var beat = sequence[col]
         if (beat !== undefined || beat.length !== 0) {
           for(var i = 0; i < beat.length; i++) {
-            synthesizer.triggerAttackRelease(beat[i])
+            synthesizer.triggerAttackRelease(beat[i], "16n")
           }
         }
       }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
