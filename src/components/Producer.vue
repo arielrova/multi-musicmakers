@@ -29,10 +29,10 @@
         <div v-if="productionStatus == 'post'">
             <h1>Get back instruments</h1>
             <div>
-                <button v-on:click="runSequencer(instrument1.track)">Enter view where you add effects to track 1</button>
+                <button v-on:click="runSequencer(instrument1.track, synthesizerOne)">Enter view where you add effects to track 1</button>
             </div>
             <div>
-                <button v-on:click="runSequencer(instrument2.track)">Enter view where you add effects to track 2</button>
+                <button v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
             </div>
             <div>
                 <button>Playback the master mix</button>
@@ -45,7 +45,8 @@
 </template>
 
 <script>
-let instrument = require('../funkystuff/instrument1.js')
+let instrumentOne = require('../funkystuff/instrument1.js')
+let instrumentTwo = require('../funkystuff/instrument2.js')
 let firebase = require('../assets/js/firebase.js')
 const db = firebase.db
 
@@ -70,11 +71,14 @@ export default {
       }
   },
   created() {
-    this.synthesizer = instrument.createSynthesizer(this.$Tone)
+    // this.synthesizer = instrument.createSynthesizer(this.$Tone)
     this.productionStatus = this.$route.params.stage
     if(this.productionStatus == 'post') {
         this.getTracks()
     }
+
+    this.synthesizerOne = instrumentOne.createSynthesizer(this.$Tone)
+    this.synthesizerTwo = instrumentTwo.createSynthesizer(this.$Tone)
   },
   methods: {
     setProductionRules: function() {
@@ -116,19 +120,28 @@ export default {
             vm.instrument2.track = prepForPlayback(session[sessionIndex].instrument2.track)
         })
     },
-    runSequencer: function(sequence) {
-        this.$Tone.context.resume()
-        this.sequencer = new this.$Tone.Sequence(function(time, col) {
+    runSequencer: function(sequence, synthesizer) {
+        var vm = this
+        var ts = this.$Tone.Transport
+        var synthesizer = synthesizer
+        var sequence = sequence
+
+        this.$StartAudioContext(this.$Tone.context).then(function() {
+            vm.$Tone.context.resume()
+            console.log(sequence)
+
+            vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
             var beat = sequence[col]
             if (beat !== undefined || beat.length !== 0) {
-            for(var i = 0; i < beat.length; i++) {
-                this.synthesizer.triggerAttackRelease(beat[i], "16n")
+                for(var i = 0; i < beat.length; i++) {
+                    synthesizer.triggerAttackRelease(beat[i], "16n")
                 }
             }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
 
-        this.$Tone.Transport.start()
-        this.sequencer.start()
+        ts.start()
+        vm.sequencer.start()
+      }) 
     },
     stopSequencer: function() {
       this.sequencer.stop()
@@ -138,7 +151,7 @@ export default {
 
 var prepForPlayback = function(array) {
     var returnArray = []
-    for(var i = 0; i < 15; i++) {
+    for(var i = 0; i < 16; i++) {
         if(array[i] == undefined) {
             returnArray[i] = []
         } else {
