@@ -22,7 +22,9 @@
 
 <script>
 
-let instrument = require('../funkystuff/instrument1.js')
+let instrumentOne = require('../funkystuff/instrument1.js')
+let instrumentTwo = require('../funkystuff/instrument2.js')
+// let chorus = require('../funkystuff/chorus.js')
 let firebase = require('../assets/js/firebase.js')
 const db = firebase.db
 
@@ -32,7 +34,7 @@ export default {
   },
   data: function () {
     return {
-      notes: { notes: ['C4', 'D4', 'E4', 'G4', 'A4'] },
+      notes: { notes: '' },
       sequence: [],
       instrumentNo: ''
     }
@@ -40,22 +42,29 @@ export default {
   created() {
     this.sequence = setupDataStructure()
     this.instrumentNo = this.$route.params.number
-    this.synthesizer = instrument.createSynthesizer(this.$Tone)
 
-    var getProductionRules = function() {
-      var vm = this
-      var sessionIndex
-      db.ref('noSessions').once('value').then(function(snapshot) {
-        sessionIndex = snapshot.val()
-      }).then(function() {
-        db.ref(sessionIndex + '/sessionParameters').set({
-          beat: vm.beat,
-          key: vm.key,
-          tempo: vm.tempo
-        })
-        db.ref(sessionIndex + '/status').set('inProduction')
-        })
-      }
+    if(this.instrumentNo == 1) {
+      this.synthesizer = instrumentOne.createSynthesizer(this.$Tone)
+      this.notes.notes = ['C4', 'D4', 'D#4', 'F4', 'G4', 'A#4', 'C5']
+    } else if(this.instrumentNo == 2) {
+      this.synthesizer = instrumentTwo.createSynthesizer(this.$Tone)
+      this.notes.notes = ['C2','D#2','F2','G2','A#2','C3'] 
+    }
+
+    // var getProductionRules = function() {
+    //   var vm = this
+    //   var sessionIndex
+    //   db.ref('noSessions').once('value').then(function(snapshot) {
+    //     sessionIndex = snapshot.val()
+    //   }).then(function() {
+    //     db.ref(sessionIndex + '/sessionParameters').set({
+    //       beat: vm.beat,
+    //       key: vm.key,
+    //       tempo: vm.tempo
+    //     })
+    //     db.ref(sessionIndex + '/status').set('inProduction')
+    //     })
+    //   }
   },
   methods: {
     runSequencer: function() {
@@ -67,11 +76,10 @@ export default {
 
         var sequence = vm.sequence
         vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
-          console.log("Danne")
           var beat = sequence[col]
           if (beat !== undefined || beat.length !== 0) {
             for(var i = 0; i < beat.length; i++) {
-              vm.synthesizer.triggerAttackRelease(beat[i])
+              vm.synthesizer.triggerAttackRelease(beat[i], "16n")
             }
           }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")

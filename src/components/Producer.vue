@@ -70,7 +70,7 @@ export default {
       }
   },
   created() {
-    let synthesizer = instrument.createSynthesizer(this.$this.$Tone)
+    this.synthesizer = instrument.createSynthesizer(this.$Tone)
     this.productionStatus = this.$route.params.stage
     if(this.productionStatus == 'post') {
         this.getTracks()
@@ -112,22 +112,17 @@ export default {
 
         db.ref(sessionIndex).once('value').then(function(data) {
             var session = data.val()
-            console.log(session)
-            console.log(vm)
             vm.instrument1.track = prepForPlayback(session[sessionIndex].instrument1.track)
             vm.instrument2.track = prepForPlayback(session[sessionIndex].instrument2.track)
         })
-
-        console.log(this)
     },
     runSequencer: function(sequence) {
-        console.log(sequence)
         this.$Tone.context.resume()
         this.sequencer = new this.$Tone.Sequence(function(time, col) {
             var beat = sequence[col]
             if (beat !== undefined || beat.length !== 0) {
             for(var i = 0; i < beat.length; i++) {
-                synthesizer.triggerAttackRelease(beat[i])
+                this.synthesizer.triggerAttackRelease(beat[i], "16n")
                 }
             }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
