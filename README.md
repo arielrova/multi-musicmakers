@@ -18,16 +18,11 @@ Firewalls will ruin stuff. Eduroam will definitly not work. Restart dev server w
 ### To-do:
 SM = Session Management (Firebase, database, state-management)
 
-6. SM - Listen for both instruments completion
-7. SM - Instrument component flex instrument 1 & 2
-8. Clean up instrument import and file structure (assets etc.)
 9. Implement instruments stop & play functions in their separate .js-files
-10. Look into iOS sounds and tone.js
-2. Make dummy second instrument view (?)
-9. SM - Producer post-production state setup (time consuming)
-4. Scaffold Effects separate modular thing
-5. Scaffold Mobile sensors modular thing
-6. Abstract production rules and Firebase call/write-functions
+9. SM - Producer post-production final mix
+4. Effects 
+5. Mobile sensors 
+6. Clean up Firebase call/write-functions
 
 ### Known Bugs:
 
@@ -39,3 +34,8 @@ SM = Session Management (Firebase, database, state-management)
 3. Scaffold Instruments separate modular thing
 4. SM - Pre-production producer view setup
 5. SM - Send instrument sequence to DB
+6. SM - Listen for both instruments completion
+7. SM - Instrument component flex instrument 1 & 2
+10. Look into iOS sounds and tone.js
+8. Clean up instrument import and file structure (assets etc.)
+
