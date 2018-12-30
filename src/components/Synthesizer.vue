@@ -21,14 +21,10 @@
 </template>
 
 <script>
-import Tone from 'tone'
-  // import StartAudioContext from 'startaudiocontext'
-  import UnmuteButton from 'unmute'
 
 let instrument = require('../funkystuff/instrument1.js')
 let firebase = require('../assets/js/firebase.js')
 const db = firebase.db
-let synthesizer = instrument.createSynthesizer()
 
 export default {
   name: 'Synthesizer',
@@ -44,6 +40,7 @@ export default {
   created() {
     this.sequence = setupDataStructure()
     this.instrumentNo = this.$route.params.number
+    this.synthesizer = instrument.createSynthesizer(this.$Tone)
 
     var getProductionRules = function() {
       var vm = this
@@ -59,28 +56,29 @@ export default {
         db.ref(sessionIndex + '/status').set('inProduction')
         })
       }
-
-    UnmuteButton().on('unmute', () => {
-      Tone.context.resume()
-
-      var vm = this
-      var ts = Tone.Transport
-      var sequence = vm.sequence
-      vm.sequencer = new Tone.Sequence(function(time, col) {
-        var beat = sequence[col]
-        if (beat !== undefined || beat.length !== 0) {
-          for(var i = 0; i < beat.length; i++) {
-            synthesizer.triggerAttackRelease(beat[i])
-          }
-        }
-      }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
-
-      ts.start()
-      vm.sequencer.start()
-		})
   },
   methods: {
     runSequencer: function() {
+      var vm = this
+      var ts = this.$Tone.Transport
+
+      this.$StartAudioContext(this.$Tone.context).then(function() {
+        vm.$Tone.context.resume()
+
+        var sequence = vm.sequence
+        vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
+          console.log("Danne")
+          var beat = sequence[col]
+          if (beat !== undefined || beat.length !== 0) {
+            for(var i = 0; i < beat.length; i++) {
+              vm.synthesizer.triggerAttackRelease(beat[i])
+            }
+          }
+        }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
+
+        ts.start()
+        vm.sequencer.start()
+      })
     },
     stopSequencer: function() {
       this.sequencer.stop()

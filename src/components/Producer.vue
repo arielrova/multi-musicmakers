@@ -45,10 +45,8 @@
 </template>
 
 <script>
-import Tone from 'tone'
 let instrument = require('../funkystuff/instrument1.js')
 let firebase = require('../assets/js/firebase.js')
-let synthesizer = instrument.createSynthesizer()
 const db = firebase.db
 
 export default {
@@ -72,6 +70,7 @@ export default {
       }
   },
   created() {
+    let synthesizer = instrument.createSynthesizer(this.$this.$Tone)
     this.productionStatus = this.$route.params.stage
     if(this.productionStatus == 'post') {
         this.getTracks()
@@ -123,8 +122,8 @@ export default {
     },
     runSequencer: function(sequence) {
         console.log(sequence)
-        Tone.context.resume()
-        this.sequencer = new Tone.Sequence(function(time, col) {
+        this.$Tone.context.resume()
+        this.sequencer = new this.$Tone.Sequence(function(time, col) {
             var beat = sequence[col]
             if (beat !== undefined || beat.length !== 0) {
             for(var i = 0; i < beat.length; i++) {
@@ -133,7 +132,7 @@ export default {
             }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
 
-        Tone.Transport.start()
+        this.$Tone.Transport.start()
         this.sequencer.start()
     },
     stopSequencer: function() {
