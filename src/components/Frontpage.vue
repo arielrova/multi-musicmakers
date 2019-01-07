@@ -1,12 +1,12 @@
 <template>
     <div class="front-page">
-        <div class="title"><h1>Hello, welcome to app!</h1></div>
-        <div class="button"><router-link v-if="status == 'inProduction'" to="/instrument/1">Instrument 1</router-link></div>
-        <div class="button"><router-link v-if="status == 'inProduction'" to="/instrument/2">Instrument 2</router-link></div>
-        <router-link v-if="status == 'preProduction'" to="/producer/pre">Producer</router-link>
-        <router-link v-if="status == 'postProduction'" to="/producer/post">Producer</router-link>
-        <br/><button v-on:click="resetFirebase()">RESET DATABASE</button>
-        <div v-if="status == 'produced'">
+        <div class="title"><h1>Relay Race</h1></div>
+        <router-link class="press" v-if="status == 'inProduction'" to="/instrument/1">Instrument 1</router-link><br/>
+        <router-link class="press" v-if="status == 'inProduction'" to="/instrument/2">Instrument 2</router-link>
+        <router-link class="press" v-if="status == 'preProduction'" to="/producer/pre">Producer</router-link>
+        <router-link class="press" v-if="status == 'postProduction'" to="/producer/post">Producer</router-link>
+        <br/><button id="reset" v-on:click="resetFirebase()">RESET DATABASE</button>
+        <div class="press" v-if="status == 'produced'">
             <h1>Here is a player!</h1>
         </div>
     </div>
@@ -50,7 +50,7 @@ export default {
 <style scoped>
 
 .front-page {
-  background-color: #7EC9D6;
+  background-color: #191919;
   width: 100vw;
   height: 100vh;
   padding: 0px;
@@ -59,18 +59,28 @@ export default {
 }
 
 .title {
-  padding-top: 10vh;
+  padding-top: 23vh;
   text-transform: uppercase;
   font-size: 2vh;
 }
 
+.press {
+  font-weight: bold;
+  font-size: 6vh;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none!important;
+}
+#reset {
+  padding-top: 35vh;
+  font-size: 2vh;
+  color: #fff;
+  text-decoration: none;
+}
+
 .button {
-  width: 35vw;
-  height: 5vh;
-  background-color: blue;
-  display: inline-block;
-  margin: 1vw;
-  border-radius: 15px;
-  padding-top: 10px;
+    padding-top: 10vh;
+    text-transform: uppercase;
+    font-size: 2vh;
 }
 </style>

@@ -1,22 +1,34 @@
 <template>
 <div class="synthesizer">
-  <h1>Hello</h1>
   <div class="sequencer">
-    <div 
+    <div
       v-for="(column, colIdx) in sequence"
-      v-bind:key="colIdx"  
+      v-bind:key="colIdx"
       class="sequencer__beat">
-      <input 
+      <label
+        class="sequencer__note_holder"
+        v-for="(note, noteIdx) in notes.notes">
+        <input
+          type="checkbox"
+          class="sequencer__note"
+          v-model="sequence[colIdx]"
+          v-bind:key="noteIdx"
+          :value="note">
+        <div class="sequencer__note_button" :value="note"></div>
+      </label>
+      <!-- <input
         v-model="sequence[colIdx]"
         v-for="(note, noteIdx) in notes.notes"
-        v-bind:key="noteIdx" 
-        type="checkbox" class="sequencer__note" 
-        :value="note">
+        v-bind:key="noteIdx"
+        type="checkbox" class="sequencer__note"
+        :value="note"> -->
     </div>
   </div>
-  <button v-on:click="runSequencer()" id="synthStart">Play some song</button>
-  <button v-on:click="stopSequencer()">Pause the song</button>
-  <button v-on:click="submitSong()">I'm done</button>
+  <div class="button_holder">
+    <button v-on:click="runSequencer()" id="synthStart">&#9658;</button>
+    <button v-on:click="stopSequencer()">&#9614;&#9614;</button>
+    <button v-on:click="submitSong()">✓</button>
+  </div>
 </div>
 </template>
 
@@ -48,7 +60,7 @@ export default {
       this.notes.notes = ['C4', 'D4', 'D#4', 'F4', 'G4', 'A#4', 'C5']
     } else if(this.instrumentNo == 2) {
       this.synthesizer = instrumentTwo.createSynthesizer(this.$Tone)
-      this.notes.notes = ['C2','D#2','F2','G2','A#2','C3'] 
+      this.notes.notes = ['C2','D#2','F2','G2','A#2','C3']
     }
 
     // var getProductionRules = function() {
@@ -75,7 +87,20 @@ export default {
         vm.$Tone.context.resume()
 
         var sequence = vm.sequence
+        let x = 0;
         vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
+
+          var beats = document.getElementsByClassName("sequencer__beat");
+          for (beat of beats) {
+            beat.style.backgroundColor = "#191919";
+          }
+          var activeBeat = document.getElementsByClassName("sequencer__beat")[x];
+          activeBeat.style.backgroundColor = "rgb(8, 4, 35,.5)";
+
+          x++;
+          if(x>=16)
+            x = 0;
+
           var beat = sequence[col]
           if (beat !== undefined || beat.length !== 0) {
             for(var i = 0; i < beat.length; i++) {
@@ -125,12 +150,96 @@ var setupDataStructure = function() {
 <style scoped>
 
 .sequencer {
-  border: 1px black solid;
   display: flex;
-  width: 400px;
+  flex-direction: column;
+  width: 100%;
 }
 
 .sequencer__beat {
-  flex-direction: column;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.sequencer__beat_active {
+  background-color: rgba(0,0,0,.1);
+}
+
+.sequencer__note_holder {
+  height:calc(100vh / 17);
+  flex: 1;
+  border-right: 1px solid rgba(255,255,255,.05);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  box-sizing: border-box;
+}
+
+.sequencer__note_holder:last-child {
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.sequencer__note_button {
+  height: 100%;
+  opacity: 0;
+  background-color: red;
+}
+
+/* ['C4', 'D4', 'D#4', 'F4', 'G4', 'A#4', 'C5']
+['C2','D#2','F2','G2','A#2','C3'] */
+
+.sequencer__note_button[value="C4"], .sequencer__note_button[value="C2"] {
+  background-color: #E71342;
+}
+
+.sequencer__note_button[value="D4"], .sequencer__note_button[value="D#2"] {
+  background-color: #E9781E;
+}
+
+.sequencer__note_button[value="D#4"], .sequencer__note_button[value="F2"] {
+  background-color: #EFB623;
+}
+
+.sequencer__note_button[value="F4"], .sequencer__note_button[value="G2"] {
+  background-color: #45C64F;
+}
+
+.sequencer__note_button[value="G4"], .sequencer__note_button[value="A#2"] {
+  background-color: #4DB1E7;
+}
+
+.sequencer__note_button[value="A#4"], .sequencer__note_button[value="C3"] {
+  background-color: #A277F1;
+}
+
+.sequencer__note_button[value="C5"] {
+  background-color: #6F38E0;
+}
+
+.sequencer__note {
+  display: none;
+}
+
+.sequencer__note:checked ~ .sequencer__note_button {
+  /* background-color:rgba(0,0,0,.5); */
+  opacity: .7;
+}
+
+.button_holder {
+  width: 100%;
+  height:calc(100vh / 17);
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  left:0px;
+  bottom:0px;
+}
+
+.button_holder button {
+  flex: 1;
+  -webkit-appearance: none;
+  border-radius: 0;
+  /* border: 1px solid rgba(0,0,0,.05);
+  box-sizing: border-box;
+  background-color: none; */
 }
 </style>
