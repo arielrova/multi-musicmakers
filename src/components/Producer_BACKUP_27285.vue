@@ -34,12 +34,14 @@
                 <button class="press" v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
             </div>
             <div>
+<<<<<<< HEAD
                 <button class="press">Playback the master mix</button>
             </div>
             <div>
                 <button class="press">Save the mix</button>
-
+=======
                 <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
+>>>>>>> 6fffc6d1444b028b551885ffba62eaff06385593
             </div>
         </div>
     </div>

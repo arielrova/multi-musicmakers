@@ -1,11 +1,12 @@
 <template>
     <div class="front-page">
       <div class="title"><h1>Relay Race</h1></div>
-      <div class="rectangle"><router-link class="press" v-if="status == 'inProduction'" to="/instrument/1">Melody</router-link></div>
-      <div class="rectangle"><router-link class="press" v-if="status == 'inProduction'" to="/instrument/2">Bass</router-link></div>
-      <router-link class="press" v-if="status == 'preProduction'" to="/producer/pre">Producer</router-link>
-        <router-link class="press" v-if="status == 'postProduction'" to="/producer/post">Producer</router-link>
-
+      <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/1">Melody</router-link></div>
+      <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/2">Bass</router-link></div>
+      <div class="rectangle" v-if="productionStatus == 'postProduction'">
+          <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
+          <!-- Markup goes here. -->
+      </div>
         <div id="tridiv">
           <div class="scene" style="-webkit-transform:rotateX(-15deg) rotateY(-40deg); -moz-transform:rotateX(-15deg) rotateY(-40deg); -ms-transform:rotateX(-15deg) rotateY(-40deg); transform:rotateX(-15deg) rotateY(-40deg); ">
             <div class="shape cuboid-1 cub-1">
@@ -78,7 +79,7 @@ export default {
 }
 
 .title {
-  padding-top: 8vh;
+  padding-top: 6vh;
   font-family: 'Kaushan Script';
   font-weight: lighter;
   font-size: 4vh;
@@ -94,6 +95,7 @@ export default {
   text-decoration: none!important;
   text-transform: uppercase;
   margin: 0px;
+  z-index: 9999;
 }
 
 #reset {
@@ -105,8 +107,8 @@ export default {
   position: absolute;
   text-transform: uppercase;
   background-color: #191919;
-    border: solid 1px white;
-    border-radius: 10px;
+  border: solid 1px white;
+  border-radius: 10px;
   padding: 0.6vh 1.3vh 0.6vh 1.3vh;
 }
 
@@ -128,7 +130,7 @@ export default {
   height: 100%;
   background: transparent;
   font-size: 100%;
-  padding-top: 52vh;
+  padding-top: 47vh;
 }
 .scene, .shape, .face, .face-wrapper, .cr {
   position: absolute;
