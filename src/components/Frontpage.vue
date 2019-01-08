@@ -100,49 +100,59 @@ export default {
             var session = data.val()
             vm.instrument1.track = prepForPlayback(session[sessionIndex].instrument1.track)
             vm.instrument2.track = prepForPlayback(session[sessionIndex].instrument2.track)
+            vm.instrument1.fx = session[sessionIndex].instrument1.fx
+            vm.instrument2.fx = session[sessionIndex].instrument2.fx
+
+            var objekt1 = instrumentOne.createSynthesizer(vm.$Tone)
+            var objekt2 = instrumentTwo.createSynthesizer(vm.$Tone)
+            vm.synthesizerOne = objekt1.synthesizer
+            vm.synthesizerTwo = objekt2.synthesizer
+            vm.filterOne = objekt1.filter
+            vm.filterTwo = objekt2.filter
+            vm.filterOne.frequency.value = vm.instrument1.fx
+            vm.filterTwo.frequency.value = vm.instrument2.fx
         })
 
-        console.log(vm)
     },
       runSequencer: function(sequenceOne, sequenceTwo, synthesizerOne, synthesizerTwo) {
         this.isPlaying = true
         var vm = this
         var ts = this.$Tone.Transport
-        var synthesizerOne = synthesizerOne
-        var synthesizerTwo = synthesizerTwo
-        var sequenceOne = sequenceOne
-        var sequenceTwo = sequenceTwo
-
-        console.log(vm)
-
         this.$StartAudioContext(this.$Tone.context).then(function() {
             vm.$Tone.context.resume()
-
+            ts.start()
             vm.player.start()
 
             vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
             var beatOne = sequenceOne[col]
             var beatTwo = sequenceTwo[col]
+            var bar = ts.position.split(":")[0]
 
             if (beatOne !== undefined || beatOne.length !== 0) {
                 for(var i = 0; i < beatOne.length; i++) {
-                    synthesizerOne.triggerAttackRelease(beatOne[i], "16n")
+                    if(bar >= 8) {
+                      synthesizerOne.triggerAttackRelease(beatOne[i], "16n")
+                    }
                 }
             }
 
-            if (beatTwo !== undefined || beatTwo.length !== 0) {
-                for(var i = 0; i < beatTwo.length; i++) {
+            // if() {
+              if (beatTwo !== undefined || beatTwo.length !== 0) {
+                for(var j = 0; j < beatTwo.length; j++) {
+                  if(bar >= 4) {
                     synthesizerTwo.triggerAttackRelease(beatTwo[i], "16n")
+                  }
                 }
-            }
+              }
+            // }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
 
-        ts.start()
         vm.sequencer.start()
       })
     },
     stopSequencer: function() {
       this.sequencer.stop()
+      this.player.stop()
       this.isPlaying = false
     },
 
@@ -160,27 +170,15 @@ export default {
 
                 if(vm.productionStatus == 'postProduction') {
 
-                    console.log("hello!")
                     vm.getTracks()
-                }
-                else if(vm.getTracks()) {
-                  vm.sequencer.stop()
                 }
             })
       })
 
-    this.synthesizerOne = instrumentOne.createSynthesizer(this.$Tone)
-    this.synthesizerTwo = instrumentTwo.createSynthesizer(this.$Tone)
-
     this.player = new vm.$Tone.Player({
-			"url" : "beat2.wav",
+			"url" : "https://raw.githubusercontent.com/arielrova/multi-musicmakers/master/src/components/beat2.wav",
 			"loop" : true
         }).toMaster();
-
-    // vm.$Tone.Buffer.on('load', function(){
-    //     player.start()
-    // })
-
   }
 }
 

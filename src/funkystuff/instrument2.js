@@ -1,4 +1,4 @@
-exports.createSynthesizer = function(Tone) {
+export function createSynthesizer(Tone) {
     var chorus = new Tone.Chorus({
             frequency  : 3 ,
             delayTime  : 2 ,
@@ -7,7 +7,7 @@ exports.createSynthesizer = function(Tone) {
             spread  : 180            
     }).toMaster();
 
-    var filter = new Tone.Filter(400, "bandpass", -24).toMaster();
+    var filter = new Tone.Filter(180, "bandpass", -24).toMaster();
     
     var synth = new Tone.Synth({
         oscillator : {
@@ -27,5 +27,5 @@ exports.createSynthesizer = function(Tone) {
 
     var synthesizer = synth.chain(filter, chorus, Tone.Master);
 
-    return synthesizer
+    return { synthesizer: synthesizer, filter: filter }
 }

@@ -16,12 +16,6 @@
           :value="note">
         <div class="sequencer__note_button" :value="note"></div>
       </label>
-      <!-- <input
-        v-model="sequence[colIdx]"
-        v-for="(note, noteIdx) in notes.notes"
-        v-bind:key="noteIdx"
-        type="checkbox" class="sequencer__note"
-        :value="note"> -->
     </div>
   </div>
   <div class="button_holder">
@@ -51,30 +45,42 @@ export default {
     }
   },
   created() {
+    var vm = this
     this.sequence = setupDataStructure()
     this.instrumentNo = this.$route.params.number
 
     if(this.instrumentNo == 1) {
-      this.synthesizer = instrumentOne.createSynthesizer(this.$Tone)
+      var objekt = instrumentOne.createSynthesizer(this.$Tone)
+      this.synthesizer = objekt.synthesizer
+      vm.filter = objekt.filter
       this.notes.notes = ['C4', 'D4', 'D#4', 'F4', 'G4', 'A#4', 'C5']
     } else if(this.instrumentNo == 2) {
-      this.synthesizer = instrumentTwo.createSynthesizer(this.$Tone)
+      var objekt = instrumentTwo.createSynthesizer(this.$Tone)
+      this.synthesizer = objekt.synthesizer
+      vm.filter = objekt.filter
       this.notes.notes = ['C2','D#2','F2','G2','A#2','C3']
     }
 
+    // this.filterOne.frequency.value = 100
+
     window.addEventListener("deviceorientation", handleOrientation, true);
 
-    var vm = this
     function handleOrientation(event) {
-        var beta     = event.beta;
+        var beta = event.beta;
 
-
-        var value = Math.abs(beta)
-        if(value > 45) {
-          vm.$Tone.Master.mute = true
-        } else {
-          vm.$Tone.Master.mute = false
-        }
+        if(beta >= 0) {
+          if(vm.instrumentNo == 1) {
+            vm.filter.frequency.value = 1500 + (beta * 33)
+          } else {
+            vm.filter.frequency.value = 200 + (beta * 3)
+          }
+        } else if (beta < 0) {
+          if(vm.instrumentNo == 1) {
+            vm.filter.frequency.value = 1500 + (beta * 15)
+          } else {
+            vm.filter.frequency.value = 200 + (beta * 1.5)
+          }
+      }
     }
   },
   methods: {
@@ -122,11 +128,11 @@ export default {
             sessionIndex = snapshot.val()
             }).then(function() {
                 db.ref(sessionIndex + '/instrument' + vm.instrumentNo + '/track').set(vm.sequence)
+                db.ref(sessionIndex + '/instrument' + vm.instrumentNo + '/fx').set(vm.filter.frequency.value)
             })
 
         db.ref(sessionIndex).once('value').then(function(snapshot) {
           var session = snapshot.val()
-          console.log(session)
           if(session[sessionIndex].instrument1.track && session[sessionIndex].instrument2.track) {
             db.ref(sessionIndex + '/status').set('postProduction'
             )

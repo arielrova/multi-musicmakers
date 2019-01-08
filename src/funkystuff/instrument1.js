@@ -1,7 +1,7 @@
 export function createSynthesizer(Tone) {
     var feedbackDelay = new Tone.FeedbackDelay("8n", 0.05).toMaster();
 
-    var filter = new Tone.Filter(3000, "bandpass", -48).toMaster();
+    var filter = new Tone.Filter(1500, "bandpass", -48).toMaster();
 
     var reverb = new Tone.Freeverb(0.9).toMaster();
 
@@ -24,7 +24,7 @@ export function createSynthesizer(Tone) {
         }
     });
 
-    var synthesizer = synth.chain(filter, reverb, feedbackDelay, Tone.Master);
+    var synthesizer = synth.chain(filter, reverb, feedbackDelay);
 
-    return synthesizer
+    return {synthesizer: synthesizer, filter: filter }
 }
