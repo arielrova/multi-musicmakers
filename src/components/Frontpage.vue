@@ -7,7 +7,6 @@
             <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
             <!-- Markup goes here. -->
         </div>
-
         <div id="tridiv">
           <div class="scene" style="-webkit-transform:rotateX(-15deg) rotateY(-40deg); -moz-transform:rotateX(-15deg) rotateY(-40deg); -ms-transform:rotateX(-15deg) rotateY(-40deg); transform:rotateX(-15deg) rotateY(-40deg); ">
             <div class="shape cuboid-1 cub-1">
@@ -191,7 +190,7 @@ var prepForPlayback = function(array) {
 }
 
 .title {
-  padding-top: 8vh;
+  padding-top: 6vh;
   font-family: 'Kaushan Script';
   font-weight: lighter;
   font-size: 4vh;
@@ -207,6 +206,7 @@ var prepForPlayback = function(array) {
   text-decoration: none!important;
   text-transform: uppercase;
   margin: 0px;
+  z-index: 9999;
 }
 
 #reset {
@@ -218,8 +218,8 @@ var prepForPlayback = function(array) {
   position: absolute;
   text-transform: uppercase;
   background-color: #191919;
-    border: solid 1px white;
-    border-radius: 10px;
+  border: solid 1px white;
+  border-radius: 10px;
   padding: 0.6vh 1.3vh 0.6vh 1.3vh;
 }
 
@@ -242,7 +242,7 @@ var prepForPlayback = function(array) {
   height: 100%;
   background: transparent;
   font-size: 100%;
-  padding-top: 52vh;
+  padding-top: 47vh;
 }
 .scene, .shape, .face, .face-wrapper, .cr {
   position: absolute;

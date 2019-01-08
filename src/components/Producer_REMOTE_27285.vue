@@ -23,15 +23,16 @@
                 <option value="beat5">beat5</option>
             </select>
             <div>
-                <button class="press" v-on:click="setProductionRules()">Save settings</button>
+                <button v-on:click="setProductionRules()">Save settings</button>
             </div>
         </div>
-        <div id="postprod" v-if="productionStatus == 'post'">
+        <div v-if="productionStatus == 'post'">
+            <h1>Get back instruments</h1>
             <div>
-                <button class="press" v-on:click="runSequencer(instrument1.track, synthesizerOne)">Enter view where you add effects to track 1</button>
+                <button v-on:click="runSequencer(instrument1.track, synthesizerOne)">Enter view where you add effects to track 1</button>
             </div>
             <div>
-                <button class="press" v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
+                <button v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
             </div>
             <div>
                 <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
@@ -68,13 +69,9 @@ export default {
   },
   created() {
     this.productionStatus = this.$route.params.stage
-    if(this.productionStatus == "postProduction") {
-        console.log("yo")
+    if(this.productionStatus == 'post') {
         this.getTracks()
     }
-
-        console.log("HELLO!")
-
 
     this.synthesizerOne = instrumentOne.createSynthesizer(this.$Tone)
     this.synthesizerTwo = instrumentTwo.createSynthesizer(this.$Tone)
@@ -141,16 +138,15 @@ export default {
             }
 
             if (beatTwo !== undefined || beatTwo.length !== 0) {
-
-                for(var j = 0; j < beatTwo.length; j++) {
-                    synthesizerTwo.triggerAttackRelease(beatTwo[j], "16n")
+                for(var i = 0; i < beatTwo.length; i++) {
+                    synthesizerTwo.triggerAttackRelease(beatTwo[i], "16n")
                 }
             }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
 
         ts.start()
         vm.sequencer.start()
-      })
+      }) 
     },
     stopSequencer: function() {
       this.sequencer.stop()
@@ -168,36 +164,12 @@ var prepForPlayback = function(array) {
         }
     }
     return returnArray
-}
+} 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .producer {
-  background-color: #191919;
-  width: 100vw;
-  height: 100vh;
-  padding: 0px;
-  margin: 0px;
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#postprod {
-  margin-top: 25vh;
-}
-
-.press {
-  color: #fff;
-  bottom: 5vh;
-  margin: 2vh;
-  font-size: 2.7vh;
-  color: #fff;
-  text-transform: uppercase;
-  background-color: #191919;
-  border: solid 1px white;
-  border-radius: 7px;
+    border: 1px black solid;
 }
 </style>
