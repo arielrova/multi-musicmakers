@@ -3,12 +3,13 @@
         <div class="title"><h1>Relay Race</h1></div>
         <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/1">Melody</router-link></div>
         <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/2">Bass</router-link></div>
-        <div class="rectangle" v-if="productionStatus == 'postProduction'">
-            <button class="press" v-if="!isPlaying" v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">final result</button>
-            <button class="press" v-if="isPlaying" v-on:click="stopSequencer" style="padding:12%4%1%7%">stop</button>
+        <div class="rectangle2" v-if="productionStatus == 'postProduction'">
+            <div class="press" v-if="!isPlaying" v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">final result</div>
+            <div class="press" v-if="isPlaying" v-on:click="stopSequencer" style="padding:12%4%1%7%">stop</div>
             <!-- Markup goes here. -->
         </div>
-        <div id="tridiv">
+
+        <div id="tridiv" v-bind:class="{'animating': isPlaying}">
           <div class="scene" style="-webkit-transform:rotateX(-15deg) rotateY(-40deg); -moz-transform:rotateX(-15deg) rotateY(-40deg); -ms-transform:rotateX(-15deg) rotateY(-40deg); transform:rotateX(-15deg) rotateY(-40deg); ">
             <div class="shape cuboid-1 cub-1">
               <div class="face ft">
@@ -213,7 +214,7 @@ var prepForPlayback = function(array) {
 }
 
 .title {
-  padding-top: 6vh;
+  padding-top: 8vh;
   font-family: 'Kaushan Script';
   font-weight: lighter;
   font-size: 4vh;
@@ -223,13 +224,14 @@ var prepForPlayback = function(array) {
 
 
 .press {
-  font-size: 7.5vh;
+  font-size: 7.2vh;
   font-family: 'Major Mono Display', monospace;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none!important;
   text-transform: uppercase;
+  padding: 2%;
+  justify-content: center;
   margin: 0px;
-  z-index: 9999;
 }
 
 #reset {
@@ -244,19 +246,44 @@ var prepForPlayback = function(array) {
   border: solid 1px white;
   border-radius: 10px;
   padding: 0.6vh 1.3vh 0.6vh 1.3vh;
+  z-index: 999;
 }
 
 .rectangle {
     z-index: 9999;
     border: solid 2px white;
     border-radius: 15px;
+    padding: 3% 4% 2% 2%;
+    width: 70%;
+    height:8.5vh;
+    margin: 10px;
+    text-decoration: none;
+}
+
+.rectangle2 {
+    z-index: 9999;
+    border: solid 2px white;
+    border-radius: 15px;
     padding: 2% 4% 2% 2%;
-    width: 60%;
+    width: 70%;
     height: 16.5vh;
     margin: 10px;
+    text-decoration: none;
 }
 
 /* boxens css */
+
+@keyframes boxAnimation {
+  0% {transform: scale(1);}
+  50% {transform: scale(1.15);}
+  100% {transform: scale(1);}
+}
+
+.animating {
+  animation-name: boxAnimation;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+}
 
 #tridiv {
   perspective: 800px;
@@ -266,7 +293,7 @@ var prepForPlayback = function(array) {
   height: 100%;
   background: transparent;
   font-size: 100%;
-  padding-top: 47vh;
+  padding-top: 52vh;
 }
 .scene, .shape, .face, .face-wrapper, .cr {
   position: absolute;
