@@ -9,6 +9,7 @@
         <div v-if="status == 'produced'">
             <h1>Here is a player!</h1>
         </div>
+        <div>{{ this.message }}</div>
     </div>
 </template>
 
@@ -23,6 +24,7 @@ export default {
   data: function() {
       return {
           status: '',
+          message: '',
       }
   },
   methods: {

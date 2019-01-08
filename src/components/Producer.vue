@@ -71,7 +71,6 @@ export default {
       }
   },
   created() {
-    // this.synthesizer = instrument.createSynthesizer(this.$Tone)
     this.productionStatus = this.$route.params.stage
     if(this.productionStatus == 'post') {
         this.getTracks()

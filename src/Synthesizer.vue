@@ -24,6 +24,7 @@
 
 let instrumentOne = require('../funkystuff/instrument1.js')
 let instrumentTwo = require('../funkystuff/instrument2.js')
+// let chorus = require('../funkystuff/chorus.js')
 let firebase = require('../assets/js/firebase.js')
 const db = firebase.db
 
@@ -50,20 +51,20 @@ export default {
       this.notes.notes = ['C2','D#2','F2','G2','A#2','C3'] 
     }
 
-    window.addEventListener("deviceorientation", handleOrientation, true);
-
-    var vm = this
-    function handleOrientation(event) {
-        var beta     = event.beta;
-
-
-        var value = Math.abs(beta)
-        if(value > 45) {
-          vm.$Tone.Master.mute = true
-        } else {
-          vm.$Tone.Master.mute = false
-        }
-    }
+    // var getProductionRules = function() {
+    //   var vm = this
+    //   var sessionIndex
+    //   db.ref('noSessions').once('value').then(function(snapshot) {
+    //     sessionIndex = snapshot.val()
+    //   }).then(function() {
+    //     db.ref(sessionIndex + '/sessionParameters').set({
+    //       beat: vm.beat,
+    //       key: vm.key,
+    //       tempo: vm.tempo
+    //     })
+    //     db.ref(sessionIndex + '/status').set('inProduction')
+    //     })
+    //   }
   },
   methods: {
     runSequencer: function() {
