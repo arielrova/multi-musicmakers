@@ -116,6 +116,8 @@ export default {
         this.$StartAudioContext(this.$Tone.context).then(function() {
             vm.$Tone.context.resume()
 
+            vm.player.start()
+
             vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
             var beatOne = sequenceOne[col]
             var beatTwo = sequenceTwo[col]
@@ -156,6 +158,15 @@ export default {
 
     this.synthesizerOne = instrumentOne.createSynthesizer(this.$Tone)
     this.synthesizerTwo = instrumentTwo.createSynthesizer(this.$Tone)
+
+    this.player = new vm.$Tone.Player({
+			"url" : "beat2.wav",
+			"loop" : true
+        }).toMaster();
+
+    // vm.$Tone.Buffer.on('load', function(){
+    //     player.start()
+    // })
 
   }
 }
