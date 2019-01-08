@@ -1,36 +1,30 @@
 export function createSynthesizer(Tone) {
-    var feedbackDelay = new Tone.FeedbackDelay("4n", 0.2).toMaster();
+    var feedbackDelay = new Tone.FeedbackDelay("8n", 0.05).toMaster();
 
-    var chorus = new Tone.Chorus({
-        frequency  : 2 ,
-        delayTime  : 2 ,
-        depth  : 0.1 ,
-        type  : 'sine',
-        spread  : 180            
-    }).toMaster();
+    var filter = new Tone.Filter(3000, "bandpass", -48).toMaster();
 
     var reverb = new Tone.Freeverb(0.9).toMaster();
 
     var synth = new Tone.PolySynth({
         polyphony  : 4 ,
-        volume  : -30 ,
+        volume  : -20,
         detune  : 0 ,
         voice: Tone.Synth
-        }).fan(chorus, feedbackDelay, reverb);
+        });
 
     synth.set({
         oscillator: {
             type: 'pulse'
         },
         envelope: {
-            attack: 0.2,
+            attack: 0.01,
             decay: 0.1,
-            sustain: 0.2,
-            release: 1
+            sustain: 0.1,
+            release: 0.3
         }
-    })
+    });
 
-    var synthesizer = synth.toMaster();
+    var synthesizer = synth.chain(filter, reverb, feedbackDelay, Tone.Master);
 
     return synthesizer
 }
