@@ -8,7 +8,6 @@
             <div class="press" v-if="isPlaying" v-on:click="stopSequencer" style="padding:12%4%1%7%">stop</div>
             <!-- Markup goes here. -->
         </div>
-
         <div id="tridiv">
           <div class="scene" style="-webkit-transform:rotateX(-15deg) rotateY(-40deg); -moz-transform:rotateX(-15deg) rotateY(-40deg); -ms-transform:rotateX(-15deg) rotateY(-40deg); transform:rotateX(-15deg) rotateY(-40deg); ">
             <div class="shape cuboid-1 cub-1">
@@ -205,7 +204,7 @@ var prepForPlayback = function(array) {
 }
 
 .title {
-  padding-top: 8vh;
+  padding-top: 6vh;
   font-family: 'Kaushan Script';
   font-weight: lighter;
   font-size: 4vh;
@@ -223,6 +222,7 @@ var prepForPlayback = function(array) {
   padding: 2%;
   justify-content: center;
   margin: 0px;
+  z-index: 9999;
 }
 
 #reset {
@@ -271,7 +271,7 @@ var prepForPlayback = function(array) {
   height: 100%;
   background: transparent;
   font-size: 100%;
-  padding-top: 52vh;
+  padding-top: 47vh;
 }
 .scene, .shape, .face, .face-wrapper, .cr {
   position: absolute;
