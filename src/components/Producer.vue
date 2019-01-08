@@ -34,7 +34,7 @@
                 <button class="press" v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
             </div>
             <div>
-                <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
+                <button class="press" v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
             </div>
         </div>
     </div>
@@ -174,7 +174,7 @@ var prepForPlayback = function(array) {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .producer {
-  background-color: #191919;
+  background-color: #232323;
   width: 100vw;
   height: 100vh;
   padding: 0px;
@@ -193,11 +193,12 @@ var prepForPlayback = function(array) {
   color: #fff;
   bottom: 5vh;
   margin: 2vh;
-  font-size: 2.7vh;
+  font-size: 2.4vh;
   color: #fff;
   text-transform: uppercase;
-  background-color: #191919;
+  background-color: #232323;
   border: solid 1px white;
   border-radius: 7px;
+  padding: 2%;
 }
 </style>

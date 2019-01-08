@@ -4,7 +4,8 @@
         <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/1">Melody</router-link></div>
         <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/2">Bass</router-link></div>
         <div class="rectangle" v-if="productionStatus == 'postProduction'">
-            <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
+            <button class="press" v-if="!isPlaying" v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">final result</button>
+            <button class="press" v-if="isPlaying" v-on:click="stopSequencer" style="padding:12%4%1%7%">stop</button>
             <!-- Markup goes here. -->
         </div>
         <div id="tridiv">
@@ -36,6 +37,7 @@ export default {
   },
   data: function() {
       return {
+          isPlaying: false,
           productionStatus: '',
           instrument1: {
               track: '',
@@ -103,6 +105,7 @@ export default {
         console.log(vm)
     },
       runSequencer: function(sequenceOne, sequenceTwo, synthesizerOne, synthesizerTwo) {
+        this.isPlaying = true
         var vm = this
         var ts = this.$Tone.Transport
         var synthesizerOne = synthesizerOne
@@ -134,9 +137,16 @@ export default {
 
         ts.start()
         vm.sequencer.start()
-      }) 
+      })
     },
+    stopSequencer: function() {
+      this.sequencer.stop()
+      this.isPlaying = false
+    },
+
   },
+
+
   created() {
       var vm = this
       var sessionIndex
@@ -147,8 +157,12 @@ export default {
               vm.productionStatus = snapshot.val()
 
                 if(vm.productionStatus == 'postProduction') {
+
                     console.log("hello!")
                     vm.getTracks()
+                }
+                else if(vm.getTracks()) {
+                  vm.sequencer.stop()
                 }
             })
       })
@@ -169,7 +183,7 @@ var prepForPlayback = function(array) {
         }
     }
     return returnArray
-} 
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -178,7 +192,7 @@ var prepForPlayback = function(array) {
 @import url('https://fonts.googleapis.com/css?family=Major+Mono+Display');
 
 .front-page {
-  background-color: #191919;
+  background-color: #232323;
   width: 100vw;
   height: 100vh;
   padding: 0px;
@@ -217,7 +231,7 @@ var prepForPlayback = function(array) {
   color: #fff;
   position: absolute;
   text-transform: uppercase;
-  background-color: #191919;
+  background-color: #232323;
   border: solid 1px white;
   border-radius: 10px;
   padding: 0.6vh 1.3vh 0.6vh 1.3vh;
@@ -227,8 +241,9 @@ var prepForPlayback = function(array) {
     z-index: 9999;
     border: solid 2px white;
     border-radius: 15px;
-    padding: 2% 4% 2% 4%;
-    width: 70%;
+    padding: 2% 4% 2% 2%;
+    width: 60%;
+    height: 16.5vh;
     margin: 10px;
 }
 
