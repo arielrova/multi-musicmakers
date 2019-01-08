@@ -211,19 +211,27 @@ var setupDataStructure = function() {
   -webkit-appearance: none;
   border-radius: 0 0 35px 0;
   color: #fff;
+  background-color: #232323;
+  border-color: rgba(255,255,255,0.5)
 }
 
 .button_holder button:nth-child(2){
-    flex: 1;
-    -webkit-appearance: none;
-    border-radius: 0 0 0 0;
-    color: #fff;
+  flex: 1;
+  -webkit-appearance: none;
+  border-radius: 0 0 0 0;
+  color: #fff;
+  background-color: #232323;
+  border-color: rgba(255,255,255,0.5)
 }
+
 .button_holder button:nth-child(1){
-    flex: 1;
-    -webkit-appearance: none;
-    border-radius: 0 0 0 35px;
-    color: #fff;
+  flex: 1;
+  -webkit-appearance: none;
+  border-radius: 0 0 0 35px;
+  color: #fff;
+  background-color: #232323;
+  border-color: rgba(255,255,255,0.2)
+
 }
 /* ['C4', 'D4', 'D#4', 'F4', 'G4', 'A#4', 'C5']
 ['C2','D#2','F2','G2','A#2','C3'] */

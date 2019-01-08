@@ -43,11 +43,6 @@ html, body {
   margin: 0;
   padding: 0;
   border: 0;
-  overflow-x: hidden;
-}
-
-body {
-  position: relative;
 }
 
 </style>
