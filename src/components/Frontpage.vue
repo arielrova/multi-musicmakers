@@ -27,6 +27,8 @@
 
 <script>
 let firebase = require('../assets/js/firebase.js')
+let instrumentOne = require('../funkystuff/instrument1.js')
+let instrumentTwo = require('../funkystuff/instrument2.js')
 const db = firebase.db
 
 export default {
@@ -98,6 +100,8 @@ export default {
             vm.instrument1.track = prepForPlayback(session[sessionIndex].instrument1.track)
             vm.instrument2.track = prepForPlayback(session[sessionIndex].instrument2.track)
         })
+
+        console.log(vm)
     },
       runSequencer: function(sequenceOne, sequenceTwo, synthesizerOne, synthesizerTwo) {
         var vm = this
@@ -106,6 +110,8 @@ export default {
         var synthesizerTwo = synthesizerTwo
         var sequenceOne = sequenceOne
         var sequenceTwo = sequenceTwo
+
+        console.log(vm)
 
         this.$StartAudioContext(this.$Tone.context).then(function() {
             vm.$Tone.context.resume()
@@ -140,12 +146,17 @@ export default {
       }).then(function() {
           db.ref(sessionIndex + '/status').once('value').then(function(snapshot) {
               vm.productionStatus = snapshot.val()
-          })
+
+                if(vm.productionStatus == 'postProduction') {
+                    console.log("hello!")
+                    vm.getTracks()
+                }
+            })
       })
 
-    if(this.productionStatus == 'postProduction') {
-        this.getTracks()
-    }
+    this.synthesizerOne = instrumentOne.createSynthesizer(this.$Tone)
+    this.synthesizerTwo = instrumentTwo.createSynthesizer(this.$Tone)
+
   }
 }
 

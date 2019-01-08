@@ -15,7 +15,7 @@ exports.createSynthesizer = function(Tone) {
             harmonicity: 3
       },
         envelope : {
-            attack : 0.2,
+            attack : 0.02,
             decay : 0.1,
             sustain: 0.2,
             release: 0.5

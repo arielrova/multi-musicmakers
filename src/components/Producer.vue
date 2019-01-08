@@ -69,9 +69,13 @@ export default {
   },
   created() {
     this.productionStatus = this.$route.params.stage
-    if(this.productionStatus == 'post') {
+    if(this.productionStatus == "postProduction") {
+        console.log("yo")
         this.getTracks()
     }
+
+        console.log("HELLO!")
+
 
     this.synthesizerOne = instrumentOne.createSynthesizer(this.$Tone)
     this.synthesizerTwo = instrumentTwo.createSynthesizer(this.$Tone)
@@ -138,8 +142,8 @@ export default {
             }
 
             if (beatTwo !== undefined || beatTwo.length !== 0) {
-                for(var i = 0; i < beatTwo.length; i++) {
-                    synthesizerTwo.triggerAttackRelease(beatTwo[i], "16n")
+                for(var j = 0; j < beatTwo.length; j++) {
+                    synthesizerTwo.triggerAttackRelease(beatTwo[j], "16n")
                 }
             }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
