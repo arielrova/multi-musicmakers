@@ -25,9 +25,9 @@
     </div>
   </div>
   <div class="button_holder">
-    <button v-on:click="runSequencer()" id="synthStart">&#9658;</button>
-    <button v-on:click="stopSequencer()">&#9614;&#9614;</button>
-    <button v-on:click="submitSong()">✓</button>
+    <button v-on:click="runSequencer()" class="bottomstyle" id="synthStart">&#9658;</button>
+    <button v-on:click="stopSequencer()" class="bottomstyle" >■</button>
+    <button v-on:click="submitSong()" class="bottomstyle" >✓</button>
   </div>
 </div>
 </template>
@@ -168,14 +168,14 @@ var setupDataStructure = function() {
 .sequencer__note_holder {
   height:calc(100vh / 17);
   flex: 1;
-  border-right: 1px solid rgba(255,255,255,.05);
-  border-bottom: 1px solid rgba(255,255,255,.05);
+  border-right: 0.2vh solid rgba(255,255,255,.1);
+  border-bottom: 0.2vh solid rgba(255,255,255,.1);
   box-sizing: border-box;
 }
 
 .sequencer__note_holder:last-child {
   border: none;
-  border-bottom: 1px solid rgba(255,255,255,.05);
+  border-bottom: 0.2vh solid rgba(255,255,255,.1);
 }
 
 .sequencer__note_button {
@@ -183,6 +183,30 @@ var setupDataStructure = function() {
   opacity: 0;
   background-color: red;
 }
+
+.bottomstyle {
+  font-size: 2vh;
+}
+
+.button_holder {
+  width: 100%;
+  height:calc(100vh / 17);
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  left:0px;
+  bottom:0px;
+}
+
+.button_holder button {
+  flex: 1;
+  -webkit-appearance: none;
+  border-radius: 0;
+  /* border: 1px solid rgba(0,0,0,.05);
+  box-sizing: border-box;
+  background-color: none; */
+}
+
 
 /* ['C4', 'D4', 'D#4', 'F4', 'G4', 'A#4', 'C5']
 ['C2','D#2','F2','G2','A#2','C3'] */
@@ -224,22 +248,4 @@ var setupDataStructure = function() {
   opacity: .7;
 }
 
-.button_holder {
-  width: 100%;
-  height:calc(100vh / 17);
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  left:0px;
-  bottom:0px;
-}
-
-.button_holder button {
-  flex: 1;
-  -webkit-appearance: none;
-  border-radius: 0;
-  /* border: 1px solid rgba(0,0,0,.05);
-  box-sizing: border-box;
-  background-color: none; */
-}
 </style>
