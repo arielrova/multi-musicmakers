@@ -1,12 +1,12 @@
 <template>
     <div class="front-page">
-      <div class="title"><h1>Relay Race</h1></div>
-      <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/1">Melody</router-link></div>
-      <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/2">Bass</router-link></div>
-      <div class="rectangle" v-if="productionStatus == 'postProduction'">
-          <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
-          <!-- Markup goes here. -->
-      </div>
+        <div class="title"><h1>Relay Race</h1></div>
+        <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/1">Melody</router-link></div>
+        <div class="rectangle" v-if="productionStatus == 'inProduction'"><router-link class="press" to="/instrument/2">Bass</router-link></div>
+        <div class="rectangle" v-if="productionStatus == 'postProduction'">
+            <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
+            <!-- Markup goes here. -->
+        </div>
         <div id="tridiv">
           <div class="scene" style="-webkit-transform:rotateX(-15deg) rotateY(-40deg); -moz-transform:rotateX(-15deg) rotateY(-40deg); -ms-transform:rotateX(-15deg) rotateY(-40deg); transform:rotateX(-15deg) rotateY(-40deg); ">
             <div class="shape cuboid-1 cub-1">
@@ -21,14 +21,13 @@
         </div>
 
         <button id="reset" v-on:click="resetFirebase()">RESET DATABASE</button>
-        <div class="press" v-if="status == 'produced'">
-            <h1>Here is a player!</h1>
-        </div>
     </div>
 </template>
 
 <script>
 let firebase = require('../assets/js/firebase.js')
+let instrumentOne = require('../funkystuff/instrument1.js')
+let instrumentTwo = require('../funkystuff/instrument2.js')
 const db = firebase.db
 
 export default {
@@ -37,15 +36,106 @@ export default {
   },
   data: function() {
       return {
-          status: '',
+          productionStatus: '',
+          instrument1: {
+              track: '',
+              fx: ''
+          },
+          instrument2: {
+              track: '',
+              fx: '',
+          },
       }
   },
   methods: {
       resetFirebase: function() {
           db.ref("1").set({
-              status: "preProduction"
+              status: "inProduction",
+              instrument1: {
+                  track: '',
+                  fx: ''
+              },
+              instrument2: {
+                  track: '',
+                  fx: ''
+              }
           })
-      }
+      },
+      setProductionRules: function() {
+        var vm = this
+        var sessionIndex
+        db.ref('noSessions').once('value').then(function(data) {
+            sessionIndex = data.val()
+            })
+            .then(function() {
+                db.ref(sessionIndex + '/sessionParameters').set({
+                    beat: vm.beat,
+                    key: vm.key,
+                    tempo: vm.tempo
+                })
+
+                db.ref(sessionIndex + '/instrument1').set({
+                    track: '',
+                    fx: ''
+                })
+
+                db.ref(sessionIndex + '/instrument2').set({
+                    track: '',
+                    fx: ''
+                })
+
+                db.ref(sessionIndex + '/status').set('inProduction')
+            })
+    },
+      getTracks: function() {
+        var vm = this
+        var sessionIndex
+        db.ref('noSessions').once('value').then(function(data) {
+            sessionIndex = data.val()
+            })
+
+        db.ref(sessionIndex).once('value').then(function(data) {
+            var session = data.val()
+            vm.instrument1.track = prepForPlayback(session[sessionIndex].instrument1.track)
+            vm.instrument2.track = prepForPlayback(session[sessionIndex].instrument2.track)
+        })
+
+        console.log(vm)
+    },
+      runSequencer: function(sequenceOne, sequenceTwo, synthesizerOne, synthesizerTwo) {
+        var vm = this
+        var ts = this.$Tone.Transport
+        var synthesizerOne = synthesizerOne
+        var synthesizerTwo = synthesizerTwo
+        var sequenceOne = sequenceOne
+        var sequenceTwo = sequenceTwo
+
+        console.log(vm)
+
+        this.$StartAudioContext(this.$Tone.context).then(function() {
+            vm.$Tone.context.resume()
+
+            vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
+            var beatOne = sequenceOne[col]
+            var beatTwo = sequenceTwo[col]
+
+            if (beatOne !== undefined || beatOne.length !== 0) {
+                for(var i = 0; i < beatOne.length; i++) {
+                    synthesizerOne.triggerAttackRelease(beatOne[i], "16n")
+                }
+            }
+
+            if (beatTwo !== undefined || beatTwo.length !== 0) {
+                for(var i = 0; i < beatTwo.length; i++) {
+                    synthesizerTwo.triggerAttackRelease(beatTwo[i], "16n")
+                }
+            }
+        }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
+
+        ts.start()
+        vm.sequencer.start()
+      }) 
+    },
   },
   created() {
       var vm = this
@@ -54,11 +144,32 @@ export default {
           sessionIndex = snapshot.val()
       }).then(function() {
           db.ref(sessionIndex + '/status').once('value').then(function(snapshot) {
-              vm.status = snapshot.val()
-          })
+              vm.productionStatus = snapshot.val()
+
+                if(vm.productionStatus == 'postProduction') {
+                    console.log("hello!")
+                    vm.getTracks()
+                }
+            })
       })
+
+    this.synthesizerOne = instrumentOne.createSynthesizer(this.$Tone)
+    this.synthesizerTwo = instrumentTwo.createSynthesizer(this.$Tone)
+
   }
 }
+
+var prepForPlayback = function(array) {
+    var returnArray = []
+    for(var i = 0; i < 16; i++) {
+        if(array[i] == undefined) {
+            returnArray[i] = []
+        } else {
+            returnArray[i] = array[i]
+        }
+    }
+    return returnArray
+} 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -113,11 +224,12 @@ export default {
 }
 
 .rectangle {
-  border: solid 2px white;
-  border-radius: 15px;
-  padding: 2% 4% 2% 4%;
-  width: 70%;
-  margin: 10px;
+    z-index: 9999;
+    border: solid 2px white;
+    border-radius: 15px;
+    padding: 2% 4% 2% 4%;
+    width: 70%;
+    margin: 10px;
 }
 
 /* boxens css */
