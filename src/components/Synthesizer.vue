@@ -126,6 +126,7 @@ export default {
 
         db.ref(sessionIndex).once('value').then(function(snapshot) {
           var session = snapshot.val()
+          console.log(session)
           if(session[sessionIndex].instrument1.track && session[sessionIndex].instrument2.track) {
             db.ref(sessionIndex + '/status').set('postProduction'
             )

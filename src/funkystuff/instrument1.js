@@ -13,7 +13,7 @@ export function createSynthesizer(Tone) {
 
     var synth = new Tone.PolySynth({
         polyphony  : 4 ,
-        volume  : -20 ,
+        volume  : -30 ,
         detune  : 0 ,
         voice: Tone.Synth
         }).fan(chorus, feedbackDelay, reverb);

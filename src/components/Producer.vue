@@ -35,10 +35,7 @@
                 <button v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
             </div>
             <div>
-                <button>Playback the master mix</button>
-            </div>
-            <div>
-                <button>Save the mix</button>
+                <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
             </div>
         </div>
     </div>
@@ -119,21 +116,30 @@ export default {
             vm.instrument2.track = prepForPlayback(session[sessionIndex].instrument2.track)
         })
     },
-    runSequencer: function(sequence, synthesizer) {
+    runSequencer: function(sequenceOne, sequenceTwo, synthesizerOne, synthesizerTwo) {
         var vm = this
         var ts = this.$Tone.Transport
-        var synthesizer = synthesizer
-        var sequence = sequence
+        var synthesizerOne = synthesizerOne
+        var synthesizerTwo = synthesizerTwo
+        var sequenceOne = sequenceOne
+        var sequenceTwo = sequenceTwo
 
         this.$StartAudioContext(this.$Tone.context).then(function() {
             vm.$Tone.context.resume()
-            console.log(sequence)
 
             vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
-            var beat = sequence[col]
-            if (beat !== undefined || beat.length !== 0) {
-                for(var i = 0; i < beat.length; i++) {
-                    synthesizer.triggerAttackRelease(beat[i], "16n")
+            var beatOne = sequenceOne[col]
+            var beatTwo = sequenceTwo[col]
+
+            if (beatOne !== undefined || beatOne.length !== 0) {
+                for(var i = 0; i < beatOne.length; i++) {
+                    synthesizerOne.triggerAttackRelease(beatOne[i], "16n")
+                }
+            }
+
+            if (beatTwo !== undefined || beatTwo.length !== 0) {
+                for(var i = 0; i < beatTwo.length; i++) {
+                    synthesizerTwo.triggerAttackRelease(beatTwo[i], "16n")
                 }
             }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
