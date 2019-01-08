@@ -26,16 +26,15 @@
                 <button v-on:click="setProductionRules()">Save settings</button>
             </div>
         </div>
-        <div v-if="productionStatus == 'post'">
-            <h1>Get back instruments</h1>
+        <div id="postprod" v-if="productionStatus == 'post'">
             <div>
-                <button v-on:click="runSequencer(instrument1.track, synthesizerOne)">Enter view where you add effects to track 1</button>
+                <button class="press" v-on:click="runSequencer(instrument1.track, synthesizerOne)">Enter view where you add effects to track 1</button>
             </div>
             <div>
-                <button v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
+                <button class="press" v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
             </div>
             <div>
-                <button v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
+                <button class="press" v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
             </div>
         </div>
     </div>
@@ -150,7 +149,7 @@ export default {
 
         ts.start()
         vm.sequencer.start()
-      }) 
+      })
     },
     stopSequencer: function() {
       this.sequencer.stop()
@@ -168,12 +167,37 @@ var prepForPlayback = function(array) {
         }
     }
     return returnArray
-} 
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .producer {
-    border: 1px black solid;
+  background-color: #232323;
+  width: 100vw;
+  height: 100vh;
+  padding: 0px;
+  margin: 0px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#postprod {
+  margin-top: 25vh;
+}
+
+.press {
+  color: #fff;
+  bottom: 5vh;
+  margin: 2vh;
+  font-size: 2.4vh;
+  color: #fff;
+  text-transform: uppercase;
+  background-color: #232323;
+  border: solid 1px white;
+  border-radius: 7px;
+  padding: 2%;
 }
 </style>

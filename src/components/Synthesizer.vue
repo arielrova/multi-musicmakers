@@ -91,7 +91,7 @@ export default {
 
           var beats = document.getElementsByClassName("sequencer__beat");
           for (beat of beats) {
-            beat.style.backgroundColor = "#191919";
+            beat.style.backgroundColor = "#232323";
           }
           var activeBeat = document.getElementsByClassName("sequencer__beat")[x];
           activeBeat.style.backgroundColor = "rgb(8, 4, 35,.5)";
@@ -165,6 +165,10 @@ var setupDataStructure = function() {
   background-color: rgba(0,0,0,.1);
 }
 
+.sequencer__beat:nth-child(4n+0) {
+  border-bottom: 0.25vh solid rgba(255,255,255,.7);
+}
+
 .sequencer__note_holder {
   height:calc(100vh / 17);
   flex: 1;
@@ -172,6 +176,7 @@ var setupDataStructure = function() {
   border-bottom: 0.2vh solid rgba(255,255,255,.1);
   box-sizing: border-box;
 }
+
 
 .sequencer__note_holder:last-child {
   border: none;
