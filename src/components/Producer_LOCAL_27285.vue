@@ -34,7 +34,10 @@
                 <button class="press" v-on:click="runSequencer(instrument2.track, synthesizerTwo)">Enter view where you add effects to track 2</button>
             </div>
             <div>
-                <button class="press" v-on:click="runSequencer(instrument1.track, instrument2.track, synthesizerOne, synthesizerTwo)">Playback the master mix</button>
+                <button class="press">Playback the master mix</button>
+            </div>
+            <div>
+                <button class="press">Save the mix</button>
             </div>
         </div>
     </div>
@@ -67,14 +70,11 @@ export default {
       }
   },
   created() {
+    // this.synthesizer = instrument.createSynthesizer(this.$Tone)
     this.productionStatus = this.$route.params.stage
-    if(this.productionStatus == "postProduction") {
-        console.log("yo")
+    if(this.productionStatus == 'post') {
         this.getTracks()
     }
-
-        console.log("HELLO!")
-
 
     this.synthesizerOne = instrumentOne.createSynthesizer(this.$Tone)
     this.synthesizerTwo = instrumentTwo.createSynthesizer(this.$Tone)
@@ -119,31 +119,21 @@ export default {
             vm.instrument2.track = prepForPlayback(session[sessionIndex].instrument2.track)
         })
     },
-    runSequencer: function(sequenceOne, sequenceTwo, synthesizerOne, synthesizerTwo) {
+    runSequencer: function(sequence, synthesizer) {
         var vm = this
         var ts = this.$Tone.Transport
-        var synthesizerOne = synthesizerOne
-        var synthesizerTwo = synthesizerTwo
-        var sequenceOne = sequenceOne
-        var sequenceTwo = sequenceTwo
+        var synthesizer = synthesizer
+        var sequence = sequence
 
         this.$StartAudioContext(this.$Tone.context).then(function() {
             vm.$Tone.context.resume()
+            console.log(sequence)
 
             vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
-            var beatOne = sequenceOne[col]
-            var beatTwo = sequenceTwo[col]
-
-            if (beatOne !== undefined || beatOne.length !== 0) {
-                for(var i = 0; i < beatOne.length; i++) {
-                    synthesizerOne.triggerAttackRelease(beatOne[i], "16n")
-                }
-            }
-
-            if (beatTwo !== undefined || beatTwo.length !== 0) {
-
-                for(var j = 0; j < beatTwo.length; j++) {
-                    synthesizerTwo.triggerAttackRelease(beatTwo[j], "16n")
+            var beat = sequence[col]
+            if (beat !== undefined || beat.length !== 0) {
+                for(var i = 0; i < beat.length; i++) {
+                    synthesizer.triggerAttackRelease(beat[i], "16n")
                 }
             }
         }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n")
@@ -174,7 +164,7 @@ var prepForPlayback = function(array) {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .producer {
-  background-color: #232323;
+  background-color: #191919;
   width: 100vw;
   height: 100vh;
   padding: 0px;
@@ -193,12 +183,11 @@ var prepForPlayback = function(array) {
   color: #fff;
   bottom: 5vh;
   margin: 2vh;
-  font-size: 2.4vh;
+  font-size: 2.7vh;
   color: #fff;
   text-transform: uppercase;
-  background-color: #232323;
+  background-color: #191919;
   border: solid 1px white;
   border-radius: 7px;
-  padding: 2%;
 }
 </style>
