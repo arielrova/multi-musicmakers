@@ -274,9 +274,9 @@ var prepForPlayback = function(array) {
 /* boxens css */
 
 @keyframes boxAnimation {
-  0% {transform: scale(1);}
-  50% {transform: scale(1.15);}
-  100% {transform: scale(1);}
+  0% {transform: scale(1.15);}
+  50% {transform: scale(1);}
+  100% {transform: scale(1.15);}
 }
 
 .animating {
