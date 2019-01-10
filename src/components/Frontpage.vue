@@ -18,9 +18,9 @@
               </div>
               <div class="face tp">
               </div>
-            </div>
           </div>
         </div>
+      </div>
 
         <button id="reset" v-on:click="resetFirebase()">RESET DATABASE</button>
     </div>
@@ -211,6 +211,7 @@ var prepForPlayback = function(array) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: -99999;
 }
 
 .title {
@@ -246,11 +247,10 @@ var prepForPlayback = function(array) {
   border: solid 1px white;
   border-radius: 10px;
   padding: 0.6vh 1.3vh 0.6vh 1.3vh;
-  z-index: 999;
 }
 
 .rectangle {
-    z-index: 9999;
+    z-index: 999999;
     border: solid 2px white;
     border-radius: 15px;
     padding: 3% 4% 2% 2%;
@@ -261,7 +261,7 @@ var prepForPlayback = function(array) {
 }
 
 .rectangle2 {
-    z-index: 9999;
+    z-index: 999999;
     border: solid 2px white;
     border-radius: 15px;
     padding: 2% 4% 2% 2%;
@@ -289,11 +289,11 @@ var prepForPlayback = function(array) {
   perspective: 800px;
   position: absolute;
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  width: 35%;
+  height: 15%;
   background: transparent;
   font-size: 100%;
-  padding-top: 52vh;
+  bottom: 20vh;
 }
 .scene, .shape, .face, .face-wrapper, .cr {
   position: absolute;

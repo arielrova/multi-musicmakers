@@ -21,7 +21,7 @@
   <div class="button_holder">
     <button v-on:click="runSequencer()" class="bottomstyle" id="synthStart">&#9658;</button>
     <button v-on:click="stopSequencer()" class="bottomstyle" >■</button>
-    <button v-on:click="submitSong()" class="bottomstyle" >✓</button>
+    <button v-on:click="submitSong()" class="bottomstyle" ><router-link to="/">✓</router-link></button>
   </div>
 </div>
 </template>
@@ -197,6 +197,16 @@ var setupDataStructure = function() {
 
 .bottomstyle {
   font-size: 2vh;
+  text-decoration: none;
+  color: #fff;
+  text-transform: none;
+}
+
+.bottomstyle a {
+  font-size: 2vh;
+  text-decoration: none;
+  color: #fff;
+  text-transform: none;
 }
 
 .button_holder {
@@ -218,7 +228,7 @@ var setupDataStructure = function() {
   border-radius: 0 0 35px 0;
   color: #fff;
   background-color: #232323;
-  border-color: rgba(255,255,255,0.5)
+  border-color: rgba(255,255,255,0.7)
 }
 
 .button_holder button:nth-child(2){
@@ -227,7 +237,7 @@ var setupDataStructure = function() {
   border-radius: 0 0 0 0;
   color: #fff;
   background-color: #232323;
-  border-color: rgba(255,255,255,0.5)
+  border-color: rgba(255,255,255,0.7)
 }
 
 .button_holder button:nth-child(1){
@@ -236,7 +246,7 @@ var setupDataStructure = function() {
   border-radius: 0 0 0 35px;
   color: #fff;
   background-color: #232323;
-  border-color: rgba(255,255,255,0.2)
+  border-color: rgba(255,255,255,0.7)
 
 }
 /* ['C4', 'D4', 'D#4', 'F4', 'G4', 'A#4', 'C5']
