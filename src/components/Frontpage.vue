@@ -119,14 +119,19 @@ export default {
         this.isPlaying = true
         var vm = this
         var ts = this.$Tone.Transport
+
+        var array1 = sequenceOne
+        var array2 = sequenceTwo
+
         this.$StartAudioContext(this.$Tone.context).then(function() {
             vm.$Tone.context.resume()
             ts.start()
             vm.player.start()
 
             vm.sequencer = new vm.$Tone.Sequence(function(time, col) {
-            var beatOne = sequenceOne[col]
-            var beatTwo = sequenceTwo[col]
+            var beatOne = array1[col]
+            var beatTwo = array2[col]
+            console.log(beatTwo)
             var bar = ts.position.split(":")[0]
 
             if (beatOne !== undefined || beatOne.length !== 0) {
@@ -141,7 +146,7 @@ export default {
               if (beatTwo !== undefined || beatTwo.length !== 0) {
                 for(var j = 0; j < beatTwo.length; j++) {
                   if(bar >= 4) {
-                    synthesizerTwo.triggerAttackRelease(beatTwo[i], "16n")
+                    synthesizerTwo.triggerAttackRelease(beatTwo[j], "16n")
                   }
                 }
               }

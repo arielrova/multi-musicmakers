@@ -21,6 +21,7 @@
   <div class="button_holder">
     <button v-on:click="runSequencer()" class="bottomstyle" id="synthStart">&#9658;</button>
     <button v-on:click="stopSequencer()" class="bottomstyle" >■</button>
+    <!-- <button v-on:click="submitSong()" class="bottomstyle" ><router-link to="/">✓</router-link></button> -->
     <button v-on:click="submitSong()" class="bottomstyle" ><router-link to="/">✓</router-link></button>
   </div>
 </div>
@@ -129,6 +130,8 @@ export default {
             }).then(function() {
                 db.ref(sessionIndex + '/instrument' + vm.instrumentNo + '/track').set(vm.sequence)
                 db.ref(sessionIndex + '/instrument' + vm.instrumentNo + '/fx').set(vm.filter.frequency.value)
+                vm.stopSequencer()
+                router.push({ path: 'front' })
             })
 
         db.ref(sessionIndex).once('value').then(function(snapshot) {
